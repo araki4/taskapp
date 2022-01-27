@@ -13,6 +13,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // タスク表のIBOutlet
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var categoryTextField: UITextField!
+    
     // Realmインスタンスを取得する
     let realm = try! Realm()  // ←追加
 
@@ -20,6 +22,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 日付の近い順でソート：昇順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)  // ←追加
+    
+    // .filter("category = 'カテゴリ1'")
+    
+    // 絞込みボタン押下処理
+    @IBAction func filterButton(_ sender: Any) {
+        
+        // 入力されたカテゴリで検索
+        if categoryTextField.text != nil && categoryTextField.text != "" {
+            // NSPredicateを使って検索条件を指定します
+            let predicate = NSPredicate(format: "category = %@", categoryTextField.text!)
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true).filter(predicate)
+            tableView.reloadData()
+        }
+    }
+    
+    // 絞込み解除ボタン押下処理
+    @IBAction func filterCancelButton(_ sender: Any) {
+        
+        taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        tableView.reloadData()
+        categoryTextField.text = nil
+        
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
