@@ -8,16 +8,27 @@
 import UIKit
 import RealmSwift    // 追加する
 import UserNotifications    // 追加
+import DropDown
 
 class InputViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
+            
+    // カテゴリー設定
     @IBOutlet weak var categoryTextField: UITextField!
+    @IBOutlet weak var categoryDropDownView: UIView!
+    let categoryDropDown = DropDown()
+    var selectedCategory = Category()
     
+    // realm設定
     let realm = try! Realm()    // 追加する
     var task: Task!   // 追加する
+    // DB内のカテゴリーが格納されるリスト。
+    // idでソート：昇順
+    // 以降内容をアップデートするとリスト内は自動的に更新される。
+    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: true)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +42,34 @@ class InputViewController: UIViewController {
         titleTextField.text = task.title
         contentsTextView.text = task.contents
         datePicker.date = task.date
-        categoryTextField.text = task.category
+        
+        // カテゴリーのドロップダウンリストの設定
+        categoryDropDown.anchorView = categoryDropDownView
+        categoryTextField.text = ""
+        // カテゴリーのドロップダウンリストの更新
+        var categoryDropDownArray: [String] = []
+        for category in categoryArray {
+            categoryDropDownArray.append(category.categoryName)
+            if category.id == task.categoryId {
+                categoryTextField.text = category.categoryName
+                selectedCategory.id = category.id
+                selectedCategory.categoryName = category.categoryName
+            }
+        }
+        categoryDropDown.dataSource = categoryDropDownArray
     }
+    
+    // カテゴリーのドロップダウンリスト選択
+    @IBAction func categoryDropDownAction(_ sender: Any) {
+        categoryDropDown.show()
+        categoryDropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+          print("Selected item: \(item) at index: \(index)")
+            categoryTextField.text = categoryArray[index].categoryName
+            selectedCategory.categoryName = categoryArray[index].categoryName
+            selectedCategory.id = categoryArray[index].id
+        }
+    }
+    
 
     @objc func dismissKeyboard(){
         // キーボードを閉じる
@@ -45,7 +82,7 @@ class InputViewController: UIViewController {
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date
-            self.task.category = self.categoryTextField.text!
+            self.task.categoryId = selectedCategory.id
             self.realm.add(self.task, update: .modified)
         }
         
@@ -93,6 +130,17 @@ class InputViewController: UIViewController {
             }
         }
     } // --- ここまで追加 ---
+    
+    // カテゴリー追加画面から戻ってきた時に TableView を更新させる
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // カテゴリーのドロップダウンリストの更新
+        var categoryDropDownArray: [String] = []
+        for category in categoryArray {
+            categoryDropDownArray.append(category.categoryName)
+        }
+        categoryDropDown.dataSource = categoryDropDownArray
+    }
 
     /*
     // MARK: - Navigation
