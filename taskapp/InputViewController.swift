@@ -12,6 +12,7 @@ import DropDown
 
 class InputViewController: UIViewController {
     
+    // 入力項目設定
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -24,11 +25,12 @@ class InputViewController: UIViewController {
     
     // realm設定
     let realm = try! Realm()    // 追加する
-    var task: Task!   // 追加する
     // DB内のカテゴリーが格納されるリスト。
     // idでソート：昇順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
-    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: true)
+    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "order", ascending: true)
+    
+    var task: Task!   // 追加する
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,16 +47,10 @@ class InputViewController: UIViewController {
         
         // カテゴリーのドロップダウンリストの設定
         categoryDropDown.anchorView = categoryDropDownView
-        categoryTextField.text = ""
         // カテゴリーのドロップダウンリストの更新
         var categoryDropDownArray: [String] = []
         for category in categoryArray {
-            categoryDropDownArray.append(category.categoryName)
-            if category.id == task.categoryId {
-                categoryTextField.text = category.categoryName
-                selectedCategory.id = category.id
-                selectedCategory.categoryName = category.categoryName
-            }
+            categoryDropDownArray.append(category.name)
         }
         categoryDropDown.dataSource = categoryDropDownArray
     }
@@ -63,10 +59,8 @@ class InputViewController: UIViewController {
     @IBAction func categoryDropDownAction(_ sender: Any) {
         categoryDropDown.show()
         categoryDropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-          print("Selected item: \(item) at index: \(index)")
-            categoryTextField.text = categoryArray[index].categoryName
-            selectedCategory.categoryName = categoryArray[index].categoryName
-            selectedCategory.id = categoryArray[index].id
+            selectedCategory = categoryArray[index]
+            categoryTextField.text = selectedCategory.name
         }
     }
     
@@ -77,18 +71,32 @@ class InputViewController: UIViewController {
     }
     
     // 追加する
+    // 画面遷移時
     override func viewWillDisappear(_ animated: Bool) {
         try! realm.write {
+            // 元のカテゴリーからタスク削除
+            if self.task.catgory.first != nil {
+                let deleteCategoryTasks = self.task.catgory.first!.tasks
+                for (index, deleteCategoryTask) in deleteCategoryTasks.enumerated() {
+                    if deleteCategoryTask.id == self.task.id {
+                        deleteCategoryTasks.remove(at: index)
+                        self.realm.add(deleteCategoryTasks, update: .modified)
+                    }
+                }
+            }
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date
-            self.task.categoryId = selectedCategory.id
             self.realm.add(self.task, update: .modified)
+            // 新しいカテゴリーへタスク追加
+            if selectedCategory.name != "" {
+                selectedCategory.tasks.append(self.task)
+                self.realm.add(selectedCategory, update: .modified)
+            }
         }
-        
         setNotification(task: task)   // 追加
-
         super.viewWillDisappear(animated)
+        
     }
     
     // タスクのローカル通知を登録する --- ここから ---
@@ -131,15 +139,26 @@ class InputViewController: UIViewController {
         }
     } // --- ここまで追加 ---
     
-    // カテゴリー追加画面から戻ってきた時に TableView を更新させる
+    // 画面表示時
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if task.catgory.first != nil {
+            selectedCategory = task.catgory.first!
+            categoryTextField.text = selectedCategory.name
+        } else {
+            selectedCategory = Category()
+            categoryTextField.text = nil
+        }
+        
         // カテゴリーのドロップダウンリストの更新
         var categoryDropDownArray: [String] = []
         for category in categoryArray {
-            categoryDropDownArray.append(category.categoryName)
+            categoryDropDownArray.append(category.name)
         }
         categoryDropDown.dataSource = categoryDropDownArray
+        
+        
     }
 
     /*

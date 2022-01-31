@@ -3,6 +3,7 @@
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -47,24 +48,29 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3xZ-yu-uny">
-                                <rect key="frame" x="10" y="54" width="290" height="34"/>
+                                <rect key="frame" x="10" y="54" width="325.33333333333331" height="34"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="カテゴリーを選択してください" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RaD-sD-ttK">
-                                <rect key="frame" x="10" y="54" width="290" height="34"/>
+                                <rect key="frame" x="10" y="54" width="325.33333333333331" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="close" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1j-NR-t1e">
-                                <rect key="frame" x="374" y="54" width="30" height="34"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1j-NR-t1e">
+                                <rect key="frame" x="379.66666666666669" y="59.333333333333336" width="24.333333333333314" height="23.666666666666664"/>
+                                <color key="tintColor" systemColor="systemGray4Color"/>
+                                <state key="normal" image="xmark.circle.fill" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                </state>
                                 <connections>
                                     <action selector="filterCancelButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="obo-ty-tlB"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3m-pL-SMH">
-                                <rect key="frame" x="310" y="54" width="54" height="34"/>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                <state key="normal" title=" 絞込み "/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3m-pL-SMH">
+                                <rect key="frame" x="345.33333333333331" y="59.333333333333336" width="24.333333333333314" height="23.666666666666664"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="magnifyingglass.circle.fill" catalog="system" symbolScale="large"/>
+                                </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
                                         <integer key="value" value="0"/>
@@ -78,7 +84,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hGa-JM-klZ">
-                                <rect key="frame" x="10" y="54" width="290" height="34"/>
+                                <rect key="frame" x="10" y="54" width="325.33333333333331" height="34"/>
                                 <connections>
                                     <action selector="categoryDropDownAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Cba-vO-XQc"/>
                                 </connections>
@@ -87,25 +93,25 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="M3m-pL-SMH" firstAttribute="centerY" secondItem="RaD-sD-ttK" secondAttribute="centerY" id="0vl-nd-ANY"/>
                             <constraint firstItem="B1j-NR-t1e" firstAttribute="leading" secondItem="M3m-pL-SMH" secondAttribute="trailing" constant="10" id="2Ps-i1-qXs"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MZo-Qu-3Cm" secondAttribute="bottom" id="38A-nx-Uhz"/>
                             <constraint firstItem="3xZ-yu-uny" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="3fC-Jf-Pgn"/>
                             <constraint firstItem="MZo-Qu-3Cm" firstAttribute="top" secondItem="RaD-sD-ttK" secondAttribute="bottom" constant="10" id="3gI-6v-ffb"/>
+                            <constraint firstItem="hGa-JM-klZ" firstAttribute="centerY" secondItem="RaD-sD-ttK" secondAttribute="centerY" id="8ZO-wp-M2F"/>
                             <constraint firstItem="RaD-sD-ttK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="9Fu-Og-WrV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="B1j-NR-t1e" secondAttribute="trailing" constant="10" id="DkR-uR-gen"/>
                             <constraint firstItem="hGa-JM-klZ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="E0v-qn-lNT"/>
-                            <constraint firstItem="M3m-pL-SMH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="FWS-Zn-8Ea"/>
                             <constraint firstItem="hGa-JM-klZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="JXn-AR-V2Y"/>
+                            <constraint firstItem="3xZ-yu-uny" firstAttribute="centerY" secondItem="RaD-sD-ttK" secondAttribute="centerY" id="K22-ke-EcN"/>
                             <constraint firstItem="M3m-pL-SMH" firstAttribute="leading" secondItem="hGa-JM-klZ" secondAttribute="trailing" constant="10" id="PTy-HN-1Ev"/>
-                            <constraint firstItem="MZo-Qu-3Cm" firstAttribute="top" secondItem="B1j-NR-t1e" secondAttribute="bottom" constant="10" id="R58-Ez-7m8"/>
                             <constraint firstItem="MZo-Qu-3Cm" firstAttribute="top" secondItem="3xZ-yu-uny" secondAttribute="bottom" constant="10" id="W6w-ge-MhG"/>
-                            <constraint firstItem="MZo-Qu-3Cm" firstAttribute="top" secondItem="M3m-pL-SMH" secondAttribute="bottom" constant="10" id="Wp0-6O-Ilf"/>
-                            <constraint firstItem="B1j-NR-t1e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="d29-oa-7CF"/>
                             <constraint firstItem="MZo-Qu-3Cm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ecc-2E-VIP"/>
                             <constraint firstItem="3xZ-yu-uny" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="euh-jl-JhP"/>
                             <constraint firstItem="MZo-Qu-3Cm" firstAttribute="top" secondItem="hGa-JM-klZ" secondAttribute="bottom" constant="10" id="iDE-FO-tfN"/>
                             <constraint firstItem="M3m-pL-SMH" firstAttribute="leading" secondItem="RaD-sD-ttK" secondAttribute="trailing" constant="10" id="kfQ-Bk-vN9"/>
                             <constraint firstItem="M3m-pL-SMH" firstAttribute="leading" secondItem="3xZ-yu-uny" secondAttribute="trailing" constant="10" id="mqX-Rw-rVr"/>
+                            <constraint firstItem="B1j-NR-t1e" firstAttribute="centerY" secondItem="RaD-sD-ttK" secondAttribute="centerY" id="n7m-NN-KbI"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MZo-Qu-3Cm" secondAttribute="trailing" id="oUD-BO-vPK"/>
                             <constraint firstItem="RaD-sD-ttK" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="wRe-Xt-Pc5"/>
                         </constraints>
@@ -177,24 +183,27 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k5K-Hg-Eg6">
-                                <rect key="frame" x="10" y="450.66666666666669" width="364" height="10"/>
+                                <rect key="frame" x="10" y="450.66666666666669" width="359.66666666666669" height="10"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="10" id="lmr-T2-wtA"/>
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="カテゴリーを選択してください" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bGO-m2-IbX">
-                                <rect key="frame" x="10" y="450.66666666666669" width="364" height="34"/>
+                                <rect key="frame" x="10" y="450.66666666666669" width="359.66666666666669" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-xn-zU5">
-                                <rect key="frame" x="384" y="457.66666666666669" width="20" height="20"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-xn-zU5">
+                                <rect key="frame" x="379.66666666666669" y="456" width="24.333333333333314" height="23.666666666666686"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="pencil.circle.fill" catalog="system" symbolScale="large"/>
+                                </state>
                                 <connections>
                                     <segue destination="a8h-gT-dMu" kind="show" id="WZT-qP-0vW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="of0-Mm-I9o">
-                                <rect key="frame" x="10" y="450.66666666666669" width="364" height="30"/>
+                                <rect key="frame" x="10" y="450.66666666666669" width="359.66666666666669" height="30"/>
                                 <connections>
                                     <action selector="categoryDropDownAction:" destination="gxO-Ng-pJD" eventType="touchUpInside" id="lg1-Pw-Pwv"/>
                                 </connections>
@@ -272,22 +281,16 @@
                                 </prototypes>
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="カテゴリー名" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QZq-pl-Ifu">
-                                <rect key="frame" x="10" y="54" width="345" height="34"/>
+                                <rect key="frame" x="10" y="54" width="359.66666666666669" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jbe-0f-bFB">
-                                <rect key="frame" x="365" y="54" width="39" height="30"/>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                <state key="normal" title=" 追加 "/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                        <integer key="value" value="0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jbe-0f-bFB">
+                                <rect key="frame" x="379.66666666666669" y="59.333333333333336" width="24.333333333333314" height="23.666666666666664"/>
+                                <color key="tintColor" systemColor="systemGreenColor"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="plus.circle.fill" catalog="system" symbolScale="large"/>
+                                </state>
                                 <connections>
                                     <action selector="categoryAddButton:" destination="a8h-gT-dMu" eventType="touchUpInside" id="c36-cd-VP6"/>
                                 </connections>
@@ -297,17 +300,23 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="KMg-hJ-eUw" firstAttribute="bottom" secondItem="lfJ-3n-IWO" secondAttribute="bottom" id="3Do-Aj-V0y"/>
-                            <constraint firstItem="jbe-0f-bFB" firstAttribute="top" secondItem="KMg-hJ-eUw" secondAttribute="top" constant="10" id="5i7-zg-IBp"/>
                             <constraint firstItem="KMg-hJ-eUw" firstAttribute="trailing" secondItem="jbe-0f-bFB" secondAttribute="trailing" constant="10" id="Fmd-Ix-yMX"/>
                             <constraint firstItem="QZq-pl-Ifu" firstAttribute="leading" secondItem="KMg-hJ-eUw" secondAttribute="leading" constant="10" id="U6x-Jt-P03"/>
                             <constraint firstItem="KMg-hJ-eUw" firstAttribute="trailing" secondItem="lfJ-3n-IWO" secondAttribute="trailing" id="Ubb-uq-nh2"/>
                             <constraint firstItem="jbe-0f-bFB" firstAttribute="leading" secondItem="QZq-pl-Ifu" secondAttribute="trailing" constant="10" id="cue-mO-UTC"/>
                             <constraint firstItem="QZq-pl-Ifu" firstAttribute="top" secondItem="KMg-hJ-eUw" secondAttribute="top" constant="10" id="l37-HT-jmG"/>
+                            <constraint firstItem="jbe-0f-bFB" firstAttribute="centerY" secondItem="QZq-pl-Ifu" secondAttribute="centerY" id="sGb-eZ-f6P"/>
                             <constraint firstItem="lfJ-3n-IWO" firstAttribute="top" secondItem="QZq-pl-Ifu" secondAttribute="bottom" constant="10" id="tdg-z0-oD7"/>
                             <constraint firstItem="lfJ-3n-IWO" firstAttribute="leading" secondItem="KMg-hJ-eUw" secondAttribute="leading" id="vOM-Yi-U8G"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="aSf-3n-4Gr"/>
+                    <navigationItem key="navigationItem" id="aSf-3n-4Gr">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="gearshape" catalog="system" style="plain" id="KAc-I7-2Zz">
+                            <connections>
+                                <action selector="editSettingButton:" destination="a8h-gT-dMu" id="i24-qd-d8j"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="categoryTableView" destination="lfJ-3n-IWO" id="Nyq-80-jut"/>
                         <outlet property="categoryTextField" destination="QZq-pl-Ifu" id="KbA-kf-VNB"/>
@@ -340,14 +349,22 @@
         <segue reference="Wbn-Bm-4px"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="gearshape" catalog="system" width="128" height="121"/>
+        <image name="magnifyingglass.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="pencil.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

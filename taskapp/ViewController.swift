@@ -15,23 +15,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableView: UITableView!
 
     // カテゴリー設定
-    let categoryDropDown = DropDown()
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var categoryDropDownView: UIView!
+    let categoryDropDown = DropDown()
     var selectedCategory = Category()
         
     // Realm設定
     let realm = try! Realm()  // ←追加
-
     // DB内のタスクが格納されるリスト。
     // 日付の近い順でソート：昇順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)  // ←追加
-    
     // DB内のカテゴリーが格納されるリスト。
-    // idでソート：昇順
+    // orderでソート：昇順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
-    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: true)
+    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "order", ascending: true)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,43 +44,37 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // カテゴリーのドロップダウンリストの更新
         var categoryDropDownArray: [String] = []
         for category in categoryArray {
-            categoryDropDownArray.append(category.categoryName)
+            categoryDropDownArray.append(category.name)
         }
         categoryDropDown.dataSource = categoryDropDownArray
     }
     
-    // 絞込みボタン押下処理
-    @IBAction func filterButton(_ sender: Any) {
-        
-        // 入力されたカテゴリで検索
-        if selectedCategory.id != 0 {
-            // NSPredicateを使って検索条件を指定します
-            let predicate = NSPredicate(format: "categoryId = %@", NSNumber.init(value: selectedCategory.id))
-            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true).filter(predicate)
-            tableView.reloadData()
-        }
-    }
+    
     
     // カテゴリードロップダウンリスト選択
     @IBAction func categoryDropDownAction(_ sender: Any) {
         categoryDropDown.show()
         categoryDropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-          print("Selected item: \(item) at index: \(index)")
-            categoryTextField.text = categoryArray[index].categoryName
-            selectedCategory.categoryName = categoryArray[index].categoryName
-            selectedCategory.id = categoryArray[index].id
+            selectedCategory = categoryArray[index]
+            categoryTextField.text = categoryArray[index].name
+        }
+    }
+    
+    // 絞込みボタン押下処理
+    @IBAction func filterButton(_ sender: Any) {
+        if categoryTextField.text != nil && categoryTextField.text != "" {
+            taskArray = selectedCategory.tasks.sorted(byKeyPath: "date", ascending: true)
+            // 入力されたカテゴリで検索
+            tableView.reloadData()
         }
     }
     
     // 絞込み解除ボタン押下処理
     @IBAction func filterCancelButton(_ sender: Any) {
-        
         taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
-        tableView.reloadData()
-        selectedCategory.categoryName = ""
-        selectedCategory.id = 0
+        selectedCategory = Category()
         categoryTextField.text = nil
-        
+        tableView.reloadData()
     }
 
     // データの数（＝セルの数）を返すメソッド
@@ -96,8 +89,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         // Cellに値を設定する  --- ここから ---
         let task = taskArray[indexPath.row]
-        cell.textLabel?.text = task.title + " (\(task.categoryId))"
-        // cell.textLabel?.text = task.title
+        cell.textLabel?.text = task.title
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
@@ -170,11 +162,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
-        
+
         // カテゴリーのドロップダウンリストの更新
         var categoryDropDownArray: [String] = []
         for category in categoryArray {
-            categoryDropDownArray.append(category.categoryName)
+            categoryDropDownArray.append(category.name)
         }
         categoryDropDown.dataSource = categoryDropDownArray
     }

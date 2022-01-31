@@ -7,6 +7,24 @@
 
 import RealmSwift
 
+class Category: Object {
+    
+    // 管理用ID（プライマリーキー）
+    @objc dynamic var id = 0
+    
+    // カテゴリー名
+    @objc dynamic var name = ""
+    
+    // カテゴリーの並び順
+    @objc dynamic var order = 0
+    
+    let tasks = List<Task>()
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+}
+
 class Task: Object {
     // 管理用 ID。プライマリーキー
     @objc dynamic var id = 0
@@ -20,8 +38,8 @@ class Task: Object {
     // 日時
     @objc dynamic var date = Date()
     
-    // カテゴリーID
-    @objc dynamic var categoryId = 0
+    // カテゴリー紐つけ
+    let catgory = LinkingObjects(fromType: Category.self, property: "tasks")
 
     // id をプライマリーキーとして設定
     override static func primaryKey() -> String? {

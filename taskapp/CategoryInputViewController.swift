@@ -19,7 +19,7 @@ class CategoryInputViewController: UIViewController,UITableViewDelegate, UITable
     // DB内のカテゴリーが格納されるリスト。
     // idでソート：昇順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
-    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: true)
+    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "order", ascending: true)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +28,10 @@ class CategoryInputViewController: UIViewController,UITableViewDelegate, UITable
         
         categoryTableView.delegate = self
         categoryTableView.dataSource = self
+        
+        // 編集モードへの切り替え
+        categoryTableView.isEditing = false
+        categoryTableView.allowsSelectionDuringEditing = true
     }
     
     // データの数（＝セルの数）を返すメソッド
@@ -42,15 +46,17 @@ class CategoryInputViewController: UIViewController,UITableViewDelegate, UITable
         
         // Cellに値を設定する
         let category = categoryArray[indexPath.row]
-        cell.textLabel?.text = category.categoryName
+        cell.textLabel?.text = category.name
         
         return cell
     }
 
     // セルが削除が可能なことを伝えるメソッド
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath)-> UITableViewCell.EditingStyle {
-        // 削除については、仕様上すでに選択済みのデータがあったとしても削除可能と仮定
-        return .delete
+        if categoryTableView.isEditing {
+            return .delete
+        }
+        return .none
     }
 
     // Delete ボタンが押された時に呼ばれるメソッド
@@ -63,9 +69,51 @@ class CategoryInputViewController: UIViewController,UITableViewDelegate, UITable
             // データベースから削除する
             try! realm.write {
                 self.realm.delete(category)
-                tableView.deleteRows(at: [indexPath], with: .fade)
+                categoryTableView.deleteRows(at: [indexPath], with: .fade)
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        // ソート制御
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let isDownMove = sourceIndexPath.row < destinationIndexPath.row
+        let targetId = categoryArray[sourceIndexPath.row].id
+        // 並び順の更新
+        for (i, category) in categoryArray.enumerated() {
+            // ソート対象のデータの場合
+            if category.id == targetId {
+                // ソートで選択されたデータの場合
+                try! realm.write {
+                    category.order = destinationIndexPath.row
+                    self.realm.add(category, update: .modified)
+                }
+            }else if isDownMove && sourceIndexPath.row < i && i <= destinationIndexPath.row {
+                try! realm.write {
+                    category.order = i - 1
+                    self.realm.add(category, update: .modified)
+                }
+            }else if !isDownMove && destinationIndexPath.row <= i && i < sourceIndexPath.row {
+                try! realm.write {
+                    category.order = i + 1
+                    self.realm.add(category, update: .modified)
+                }
+            }else{
+                try! realm.write {
+                    category.order = i
+                    self.realm.add(category, update: .modified)
+                }
+            }
+        }
+        categoryTableView.reloadData()
+    }
+    
+    // 設定ボタンによる編集モードの制御
+    @IBAction func editSettingButton(_ sender: Any) {
+        categoryTableView.isEditing = !categoryTableView.isEditing
     }
     
     // カテゴリー追加ボタン押下処理
@@ -74,13 +122,14 @@ class CategoryInputViewController: UIViewController,UITableViewDelegate, UITable
         // カテゴリー登録
         if self.categoryTextField.text != nil && self.categoryTextField.text != "" {
             let category = Category()
-            category.id = 1
+            // category.id = 1
             let allCategorys = realm.objects(Category.self)
             if allCategorys.count != 0 {
                 category.id = allCategorys.max(ofProperty: "id")! + 1
+                category.order = allCategorys.max(ofProperty: "order")! + 1
             }
             
-            category.categoryName = self.categoryTextField.text!
+            category.name = self.categoryTextField.text!
 
             try! realm.write {
                 self.realm.add(category, update: .modified)
