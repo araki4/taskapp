@@ -41,12 +41,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         // カテゴリーのドロップダウンリストの設定
         categoryDropDown.anchorView = categoryDropDownView
-        // カテゴリーのドロップダウンリストの更新
-        var categoryDropDownArray: [String] = []
-        for category in categoryArray {
-            categoryDropDownArray.append(category.name)
-        }
-        categoryDropDown.dataSource = categoryDropDownArray
+        categoryDropDown.dataSource = []
     }
     
     
